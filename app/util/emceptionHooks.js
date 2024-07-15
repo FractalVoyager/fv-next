@@ -19,10 +19,10 @@ function doimport(str) {
   const blob = new Blob([str], { type: "text/javascript" });
   const url = URL.createObjectURL(blob);
   // need this to tell webpack to take this as a normal import() and not do anything speical with it
-  const module = import(/* webpackIgnore: true */ url);
+  const myModule = import(/* webpackIgnore: true */ url);
 
   URL.revokeObjectURL(url); // GC objectURLs
-  return module;
+  return myModule;
 }
 
 // variable for emception - TODO - should probably be a ref

@@ -425,9 +425,9 @@ function Control({}) {
                     language
                   </Card.Subtitle>
                   <Card.Text>
-                    Enter a script in the text box and press "compile and run".
-                    To alter the paramters passed to the program, edit the
-                    options then click update.
+                    Enter a script in the text box and press &quot;compile and
+                    run&quot;. To alter the paramters passed to the program,
+                    edit the options then click update.
                   </Card.Text>
                   {/* <Card.Link href="#">Language Doccumentation</Card.Link> */}
                 </Card.Body>

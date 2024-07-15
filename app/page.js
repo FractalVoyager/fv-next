@@ -3,6 +3,7 @@ import "./global.css";
 import { useInitEmception } from "./util/emceptionHooks";
 import Control from "./components/Control/controlComponent";
 import Terminal from "./components/Console/myTermComponent";
+import Head from "next/head";
 
 /*
 Main app component, initializes emcetion (c++ to wasm in browser compiler) - 
@@ -14,9 +15,17 @@ export default function Home({}) {
   useInitEmception();
 
   return (
-    <div id="page-container">
-      <Control />
-      <Terminal />
-    </div>
+    <>
+      <link
+        rel="icon"
+        href="/icon?<generated>"
+        type="image/<generated>"
+        sizes="<generated>"
+      />
+      <div id="page-container">
+        <Control />
+        <Terminal />
+      </div>
+    </>
   );
 }
