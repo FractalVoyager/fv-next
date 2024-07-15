@@ -4,6 +4,7 @@ import "./control.css";
 import { useRef, useState, useEffect } from "react";
 import Viewer from "../Viewer/viewerComponent";
 import { useCompileCode } from "../../hooks/emceptionHooks";
+import CuttoffParams from "./params/cutoffParams";
 import {
   useBackState,
   useCompileStore,
@@ -417,82 +418,16 @@ export default function Control({}) {
         >
           {wrapperRef.current ? (
             <>
-              <Card id="header" ref={(el) => (childrenRefs.current[0] = el)}>
-                <Card.Body>
-                  <Card.Title>Fractal Voyager</Card.Title>
-                  <Card.Subtitle>
-                    Online fractal generator using a complex dynamics scripting
-                    language
-                  </Card.Subtitle>
-                  <Card.Text>
-                    Enter a script in the text box and press &quot;compile and
-                    run&quot;. To alter the paramters passed to the program,
-                    edit the options then click update.
-                  </Card.Text>
-                  {/* <Card.Link href="#">Language Doccumentation</Card.Link> */}
-                </Card.Body>
-              </Card>
-              {/* <Header /> */}
+              <Header ref={(el) => (childrenRefs.current[0] = el)} />
+
               <Container fluid ref={(el) => (childrenRefs.current[1] = el)}>
                 <Row>
                   <div className={styleType < 3 ? "col" : ""}>
                     {styleType < 2 ? (
-                      <Form>
-                        <Form.Group>
-                          <Form.Label>Max Radius</Form.Label>
-                          <Form.Control
-                            value={tmpParams.maxRad}
-                            onChange={(e) =>
-                              setTmpParams({
-                                ...tmpParams,
-                                maxRad: e.target.value,
-                              })
-                            }
-                            type="number"
-                          ></Form.Control>
-                        </Form.Group>
-                        <Form.Group>
-                          <Form.Label>Min Radius</Form.Label>
-                          <Form.Control
-                            value={tmpParams.minRad}
-                            onChange={(e) =>
-                              setTmpParams({
-                                ...tmpParams,
-                                minRad: e.target.value,
-                              })
-                            }
-                            type="number"
-                          ></Form.Control>
-                        </Form.Group>
-                        <Form.Group>
-                          <Form.Label>Epsilon</Form.Label>
-                          <Form.Control
-                            value={tmpParams.epsilon}
-                            onChange={(e) =>
-                              setTmpParams({
-                                ...tmpParams,
-                                epsilon: e.target.value,
-                              })
-                            }
-                            type="number"
-                          ></Form.Control>
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>Max Iterations</Form.Label>
-                          <Form.Control
-                            type="number"
-                            disabled={tmpParams.type === 2}
-                            value={tmpParams.maxIters}
-                            onChange={(e) =>
-                              setTmpParams({
-                                ...tmpParams,
-                                maxIters: e.target.value,
-                              })
-                            }
-                          ></Form.Control>
-                        </Form.Group>
-                      </Form>
+                      <CuttoffParams
+                        tmpParams={tmpParams}
+                        setTmpParams={setTmpParams}
+                      />
                     ) : (
                       <>
                         <Form id="script-form">
@@ -774,62 +709,10 @@ export default function Control({}) {
                               <Container>
                                 <Row>
                                   <Col>
-                                    <Form>
-                                      <Form.Group>
-                                        <Form.Label>Max Radius</Form.Label>
-                                        <Form.Control
-                                          value={tmpParams.maxRad}
-                                          onChange={(e) =>
-                                            setTmpParams({
-                                              ...tmpParams,
-                                              maxRad: e.target.value,
-                                            })
-                                          }
-                                          type="number"
-                                        ></Form.Control>
-                                      </Form.Group>
-                                      <Form.Group>
-                                        <Form.Label>Min Radius</Form.Label>
-                                        <Form.Control
-                                          value={tmpParams.minRad}
-                                          onChange={(e) =>
-                                            setTmpParams({
-                                              ...tmpParams,
-                                              minRad: e.target.value,
-                                            })
-                                          }
-                                          type="number"
-                                        ></Form.Control>
-                                      </Form.Group>
-                                      <Form.Group>
-                                        <Form.Label>Epsilon</Form.Label>
-                                        <Form.Control
-                                          value={tmpParams.epsilon}
-                                          onChange={(e) =>
-                                            setTmpParams({
-                                              ...tmpParams,
-                                              epsilon: e.target.value,
-                                            })
-                                          }
-                                          type="number"
-                                        ></Form.Control>
-                                      </Form.Group>
-
-                                      <Form.Group>
-                                        <Form.Label>Max Iterations</Form.Label>
-                                        <Form.Control
-                                          type="number"
-                                          disabled={tmpParams.type === 2}
-                                          value={tmpParams.maxIters}
-                                          onChange={(e) =>
-                                            setTmpParams({
-                                              ...tmpParams,
-                                              maxIters: e.target.value,
-                                            })
-                                          }
-                                        ></Form.Control>
-                                      </Form.Group>
-                                    </Form>
+                                    <CuttoffParams
+                                      tmpParams={tmpParams}
+                                      setTmpParams={setTmpParams}
+                                    />
                                     <Form>
                                       <Button
                                         disabled={tmpParams.type === 2}
@@ -1283,62 +1166,10 @@ export default function Control({}) {
                           Edit program paramters, close, then presss update
                         </Modal.Header>
                         <Modal.Body>
-                          <Form>
-                            <Form.Group>
-                              <Form.Label>Max Radius</Form.Label>
-                              <Form.Control
-                                value={tmpParams.maxRad}
-                                onChange={(e) =>
-                                  setTmpParams({
-                                    ...tmpParams,
-                                    maxRad: e.target.value,
-                                  })
-                                }
-                                type="number"
-                              ></Form.Control>
-                            </Form.Group>
-                            <Form.Group>
-                              <Form.Label>Min Radius</Form.Label>
-                              <Form.Control
-                                value={tmpParams.minRad}
-                                onChange={(e) =>
-                                  setTmpParams({
-                                    ...tmpParams,
-                                    minRad: e.target.value,
-                                  })
-                                }
-                                type="number"
-                              ></Form.Control>
-                            </Form.Group>
-                            <Form.Group>
-                              <Form.Label>Epsilon</Form.Label>
-                              <Form.Control
-                                value={tmpParams.epsilon}
-                                onChange={(e) =>
-                                  setTmpParams({
-                                    ...tmpParams,
-                                    epsilon: e.target.value,
-                                  })
-                                }
-                                type="number"
-                              ></Form.Control>
-                            </Form.Group>
-
-                            <Form.Group>
-                              <Form.Label>Max Iterations</Form.Label>
-                              <Form.Control
-                                type="number"
-                                disabled={tmpParams.type === 2}
-                                value={tmpParams.maxIters}
-                                onChange={(e) =>
-                                  setTmpParams({
-                                    ...tmpParams,
-                                    maxIters: e.target.value,
-                                  })
-                                }
-                              ></Form.Control>
-                            </Form.Group>
-                          </Form>
+                          <CuttoffParams
+                            tmpParams={tmpParams}
+                            setTmpParams={setTmpParams}
+                          />
                         </Modal.Body>
                       </Modal>
                     </Col>

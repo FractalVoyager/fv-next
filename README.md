@@ -65,5 +65,6 @@ refer to SYE final paper section 6 for further explanations (p. 55)
 
 - create-react-app (the build tool used) is no longer maintained. I have been using next.js (a build tool and framework for react) instead recently. Switching to next.js I beleive is needed.
 - the cgen to generate the c++ is currently written in c++ and needs to be compiled to wasm. I am more comfortable with js, and since we are compiling instead of interpreting, the performance hit of switching to js would be miniscule. I think it would also make changes to the cgen code easier and easier to intergrate, along with simplying the flow of the applicaiton.
+- Instead of using global store, I could pass down state setting variables. Lately, I have only been using global store for multiple page application. Might be nice to have the option to easilly make this multi page though.
 
 In this branch, I plan to refactor the project to next.js and the js runtime for antlr4
