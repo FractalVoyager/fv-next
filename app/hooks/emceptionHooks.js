@@ -7,7 +7,7 @@ import {
   useWriteOrbitStore,
 } from "../store/zustandTest.js";
 import { useTermStore } from "../store/zustandTest.js";
-import { complexToCanvas } from "./util.js";
+import { complexToCanvas } from "../util/util.js";
 
 /*
 description: this is a collection of three hooks that interact with emception (the in browser c++ to wasm compiler) 

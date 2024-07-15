@@ -11,7 +11,7 @@ props: none
 returns: the terminal component which displays helpful messages and functions 
 description: takes text from global store and writes it to the "terminal"
 */
-const Terminal = () => {
+export default function Terminal({}) {
   const [termMaxed, setTermMaxed] = useState(true);
   // get text, color, and bool if there should be a newline from store
   const { text, color, newLine } = useTermStore((state) => ({
@@ -67,6 +67,4 @@ const Terminal = () => {
       </div>
     </>
   );
-};
-
-export default Terminal;
+}

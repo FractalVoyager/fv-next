@@ -9,7 +9,7 @@ props: selectedColor: color that slider selected, num: how many colors, wrapper:
 returns: gradient of selected colors with the number of colors being num
 description: calculates a color gradient of selected color and displays it 
  */
-function ColorDisplayer({ selectedColor, num, wrapper }) {
+export default function ColorDisplayer({ selectedColor, num, wrapper }) {
   // local state of all the colors
   const [colors, setColors] = useState();
   // sets the global state varaible which is the colors and numColors
@@ -67,5 +67,3 @@ function ColorDisplayer({ selectedColor, num, wrapper }) {
     return;
   }
 }
-
-export default ColorDisplayer;

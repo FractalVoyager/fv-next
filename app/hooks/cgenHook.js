@@ -103,4 +103,4 @@ const useCgen = (script) => {
   return code;
 };
 
-export default useCgen;
+export { useCgen };

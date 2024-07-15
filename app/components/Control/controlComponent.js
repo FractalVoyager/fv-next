@@ -3,7 +3,7 @@
 import "./control.css";
 import { useRef, useState, useEffect } from "react";
 import Viewer from "../Viewer/viewerComponent";
-import { useCompileCode } from "../../util/emceptionHooks";
+import { useCompileCode } from "../../hooks/emceptionHooks";
 import {
   useBackState,
   useCompileStore,
@@ -13,7 +13,7 @@ import {
 } from "../../store/zustandTest.js";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import useCgen from "../../util/cgenHook";
+import { useCgen } from "../../hooks/cgenHook";
 import Header from "../Header/headerComponent";
 import ColorPicker from "../Colors/SliderComponent";
 import Container from "react-bootstrap/Container";
@@ -36,7 +36,7 @@ it allows an update button click, which changes the props, rerendering viewer. T
 julia set or obit button is also here, but handled differently than above flow
 */
 
-function Control({}) {
+export default function Control({}) {
   // * refs * //
   const wrapperRef = useRef(null);
   const childrenRefs = useRef([]);
@@ -1425,5 +1425,3 @@ function Control({}) {
     </>
   );
 }
-
-export default Control;

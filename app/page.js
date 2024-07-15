@@ -1,9 +1,8 @@
 "use client";
 import "./global.css";
-import { useInitEmception } from "./util/emceptionHooks";
+import { useInitEmception } from "./hooks/emceptionHooks";
 import Control from "./components/Control/controlComponent";
 import Terminal from "./components/Console/myTermComponent";
-import Head from "next/head";
 
 /*
 Main app component, initializes emcetion (c++ to wasm in browser compiler) - 

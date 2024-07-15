@@ -18,7 +18,7 @@ returns: the slider (hue picker), and the color displayer which is all the color
 descripion: this is the color picker, it uses a hue picker slider from a npm package 
 and uses the color picked from that to generate the color boxes which is a child compoenent
 */
-function ColorPicker({ num }) {
+export default function ColorPicker({ num }) {
   // is the color where the slider currently is and allows it to move, starts as a tealish blue
   const [selectedColor, setSelectedColor] = useState({
     hex: "#00c4ff",
@@ -48,5 +48,3 @@ function ColorPicker({ num }) {
     </div>
   );
 }
-
-export default ColorPicker;

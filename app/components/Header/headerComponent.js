@@ -5,7 +5,7 @@ props: none
 returns: header component only
 descripton: simple component just to return header
 */
-const Header = () => {
+export default function Header({}) {
   return (
     <>
       <Card id="header">
@@ -24,6 +24,4 @@ const Header = () => {
       </Card>
     </>
   );
-};
-
-export default Header;
+}

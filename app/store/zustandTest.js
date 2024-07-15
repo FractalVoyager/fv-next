@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 /*
 this is a store for global state used throughout app
 zustand is an npm package that "replaces" react context or redux

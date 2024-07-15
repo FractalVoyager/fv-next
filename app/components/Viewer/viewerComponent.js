@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import CordsBox from "../CordsBox/cordsBoxComponent";
 import { canvasToComplex, canvasToPoint } from "../../util/util";
 import { useBackState, useCompileStore } from "../../store/zustandTest.js";
-import { useGenPixles } from "../../util/emceptionHooks";
+import { useGenPixles } from "../../hooks/emceptionHooks";
 import {
   useTmpParamsStore,
   useTermStore,
@@ -32,7 +32,7 @@ returns: the canvases, the cords box, the download link
 description: controls the state for generating and displaying fractals and orbit. Interacts with useGenPixles to 
 to generate fractals and obrit
 */
-const Viewer = ({
+export default function Viewer({
   xRes,
   yRes,
   initXscale,
@@ -52,7 +52,7 @@ const Viewer = ({
   orbitColor,
   genVals,
   showFrac,
-}) => {
+}) {
   // * useRefs * //
 
   // this is a ref to div that canvases fill used to calculate max sizes
@@ -823,6 +823,4 @@ const Viewer = ({
       </div>
     </>
   );
-};
-
-export default Viewer;
+}

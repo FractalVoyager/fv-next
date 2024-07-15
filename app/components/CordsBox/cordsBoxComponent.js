@@ -3,7 +3,7 @@ props: display: wether the cords box should be displayed or not, cords: the comp
 returns: this component only (cords box)
 description: simple component that displays the complex number on screen if prompted
 */
-const CordsBox = ({ display, cords: { re, im } }) => {
+export default function CordsBox({ display, cords: { re, im } }) {
   return (
     <>
       <div id="cordsBox">
@@ -19,6 +19,4 @@ const CordsBox = ({ display, cords: { re, im } }) => {
       </div>
     </>
   );
-};
-
-export default CordsBox;
+}

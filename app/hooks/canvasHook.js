@@ -34,4 +34,4 @@ const useCanvas = (draw, options) => {
   return canRef;
 };
 
-export default useCanvas;
+export { useCanvas };

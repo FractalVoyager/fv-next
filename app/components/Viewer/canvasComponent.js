@@ -1,10 +1,11 @@
+"use client";
 // reference : https://medium.com/@pdx.lucasm/canvas-with-react-js-32e133c05258
 
 // this should just be for creating the canvas and updating it with state in viewComponent
 // by calling useCanvas
 
 import { useEffect } from "react";
-import useCanvas from "../../util/canvasHook";
+import { useCanvas } from "../../hooks/canvasHook";
 import { useFracRefStore, useCanStyleStore } from "../../store/zustandTest";
 
 /*
@@ -19,7 +20,7 @@ they use state that is held in the parent component
 returns: the canvas
 description: calucates size of canvas and returns, calls the useCanvas hook to draw onto the canvas
  */
-const Canvas = ({
+export default function Canvas({
   draw,
   xRes,
   yRes,
@@ -31,7 +32,7 @@ const Canvas = ({
   mouseDown,
   mouseMove,
   mouseUp,
-}) => {
+}) {
   // gets the ref for can and calls draws on the canvas with useCanvas
   const canRef = useCanvas(draw, options);
 
@@ -97,5 +98,4 @@ const Canvas = ({
       onMouseUp={(e) => mouseUp(e)}
     />
   );
-};
-export default Canvas;
+}
