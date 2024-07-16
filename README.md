@@ -72,5 +72,5 @@ In this branch, I plan to refactor the project to next.js and the js runtime for
 # Notes
 
 - go through and try to abstract all of the state away from Control Componenet I can
-- also see where the store is really nessecary
+- also see where the store is really nessecary (global state - commenented on them)
 - abstract updateParams funciton

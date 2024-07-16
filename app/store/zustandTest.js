@@ -28,6 +28,7 @@ const useTermStore = create((set) => ({
   quickWrite: (text) => set({ text: text, color: "white", newLine: true }),
 }));
 
+// - get rid of this ----
 // tmp store for colors set by color component, global store to pass up components
 const useColorsStore = create((set) => ({
   amt: null,
@@ -36,6 +37,7 @@ const useColorsStore = create((set) => ({
 }));
 
 // wether back is allowed or not
+// check
 const useBackState = create((set) => ({
   allowed: false,
   setAllowed: (bool) => set({ allowed: bool }),
@@ -43,6 +45,7 @@ const useBackState = create((set) => ({
 
 // the tmp params (options in control component) that are what the viewer is currently runnign with
 // written to by both control component and viewer component
+// fine
 const useTmpParamsStore = create((set) => ({
   realMin: -2,
   realMax: 2,
@@ -225,6 +228,7 @@ const useTmpParamsStore = create((set) => ({
   setGenVals: (re, im) => set({ re: re, im: im }),
 }));
 
+// invesigate ---
 // store a ref for downloading
 const useFracRefStore = create((set) => ({
   fracRef: null,
@@ -233,6 +237,7 @@ const useFracRefStore = create((set) => ({
 
 // to make the viewer to know the new type when you tpye a new script, without this - it draws the right type, but then
 // when you zoom or do anything it viewer it reverts back to the old type
+// prob fine but check
 const useResetType = create((set) => ({
   type: null,
   update: 0,
@@ -240,11 +245,13 @@ const useResetType = create((set) => ({
 }));
 
 // wether we should delete the fractal when dragging orbit
+// check
 const useWriteOrbitStore = create((set) => ({
   write: true,
   setWrite: (bool) => set({ write: bool }),
 }));
 
+// check
 const useCanStyleStore = create((set) => ({
   width: null,
   maxWidth: null,
@@ -252,11 +259,6 @@ const useCanStyleStore = create((set) => ({
   setWidth: (width) => set({ width: width }),
   setMaxWidth: (width) => set({ maxWidth: width }),
   triggerReCalc: () => set((state) => ({ reCalc: state.reCalc + 1 })),
-}));
-
-const useSetToModalStore = create((set) => ({
-  colors: false,
-  setColors: (bool) => set({ colors: bool }),
 }));
 
 export {
