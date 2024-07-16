@@ -68,3 +68,9 @@ refer to SYE final paper section 6 for further explanations (p. 55)
 - Instead of using global store, I could pass down state setting variables. Lately, I have only been using global store for multiple page application. Might be nice to have the option to easilly make this multi page though.
 
 In this branch, I plan to refactor the project to next.js and the js runtime for antlr4
+
+# Notes
+
+- go through and try to abstract all of the state away from Control Componenet I can
+- also see where the store is really nessecary
+- abstract updateParams funciton

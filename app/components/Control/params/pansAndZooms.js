@@ -1,50 +1,23 @@
-import { Button } from "react-bootstrap";
+import Btn from "../formElements/btn";
 
 export default function PansAndZooms({ tmpParams, handleZoom, handlePan }) {
+  const pansAndZooms = [
+    { name: "+", handler: () => handleZoom(true) },
+    { name: "-", handler: () => handleZoom(false) },
+    { name: "left", handler: () => handlePan("left") },
+    { name: "right", handler: () => handlePan("right") },
+    { name: "up", handler: () => handlePan("up") },
+    { name: "down", handler: () => handlePan("down") },
+  ];
   return (
     <>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handleZoom(true)}
-      >
-        +
-      </Button>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handleZoom(false)}
-      >
-        -
-      </Button>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handlePan("left")}
-      >
-        left
-      </Button>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handlePan("right")}
-      >
-        right
-      </Button>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handlePan("up")}
-      >
-        up
-      </Button>
-      <Button
-        disabled={tmpParams.type === 2}
-        variant="primary"
-        onClick={() => handlePan("down")}
-      >
-        down
-      </Button>
+      {pansAndZooms.map((obj) => (
+        <Btn
+          displayName={obj.name}
+          setParam={obj.handler}
+          disabled={tmpParams.type === 2}
+        />
+      ))}
     </>
   );
 }

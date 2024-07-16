@@ -1,19 +1,19 @@
 import { Form } from "react-bootstrap";
+import TextBox from "../formElements/textBox";
 export default function Orbits({ tmpParams, setTmpParams }) {
   return (
     <>
-      <Form.Label>Orbit Iterations</Form.Label>
-      <Form.Control
-        placeholder="orbit number"
-        type="number"
-        value={tmpParams.orbitNum}
-        onChange={(e) =>
+      <TextBox
+        displayName={"Orbit Iterations"}
+        val={tmpParams.orbitNum}
+        updateParam={(newVal) =>
           setTmpParams({
             ...tmpParams,
-            orbitNum: e.target.value,
+            orbitNum: newVal,
           })
         }
-      ></Form.Control>
+      />
+
       <Form.Label>Orbit Color</Form.Label>
       <Form.Select
         aria-label="Default select example"

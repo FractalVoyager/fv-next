@@ -1,37 +1,39 @@
 import { Button } from "react-bootstrap";
+import Btn from "../formElements/btn";
 export default function MainBtns({
   backReady,
   setBack,
   updateOk,
   handleUpdate,
 }) {
+  const btns = [
+    {
+      name: "Back",
+      setter: () => setBack((prev) => prev + 1),
+      disabler: backReady,
+    },
+    {
+      name: "Update",
+      setter: handleUpdate,
+      disabler: updateOk,
+    },
+  ];
   return (
     <>
-      {backReady ? (
-        <Button variant="primary" onClick={() => setBack((prev) => prev + 1)}>
-          Back
-        </Button>
-      ) : (
-        <Button
-          variant="primary"
-          disabled
-          onClick={() => setBack((prev) => prev + 1)}
-        >
-          Back
-        </Button>
-      )}
-      {/* <Button variant="primary">Forward</Button> */}
-      {/* <Button variant="primary" onClick={resetTmpGlobal}>
-                    Reset
-                  </Button> */}
-      {updateOk ? (
-        <Button variant="warning" onClick={handleUpdate}>
-          Update
-        </Button>
-      ) : (
-        <Button variant="warning" disabled>
-          Update
-        </Button>
+      {btns.map((obj) =>
+        obj.disabler ? (
+          <Btn
+            displayName={obj.name}
+            setParam={obj.setter}
+            isNotPrimary={obj.name === "Update"}
+          />
+        ) : (
+          <Btn
+            displayName={obj.name}
+            isDisabled={true}
+            isNotPrimary={obj.name === "Update"}
+          />
+        )
       )}
     </>
   );
