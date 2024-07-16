@@ -2,7 +2,6 @@ import { Form } from "react-bootstrap";
 import TextBoxControl from "../textBoxControl";
 
 export default function CuttoffParams({ tmpParams, setTmpParams }) {
-  console.log("JJJJJ", tmpParams.type);
   return (
     <Form>
       <TextBoxControl
