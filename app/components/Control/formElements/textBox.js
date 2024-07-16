@@ -1,10 +1,5 @@
 import { Form } from "react-bootstrap";
-export default function TextBoxControl({
-  displayName,
-  val,
-  updateParam,
-  disabled,
-}) {
+export default function TextBox({ displayName, val, updateParam, disabled }) {
   return (
     <>
       <Form.Label>{displayName}</Form.Label>

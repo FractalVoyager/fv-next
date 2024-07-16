@@ -1,5 +1,6 @@
 import { Form, Button } from "react-bootstrap";
-import TextBoxControl from "../TextBoxControl";
+import TextBox from "../formElements/textBox";
+import ShowHideButton from "../formElements/showHideButton";
 
 const textBoxNames = [
   { name: "Real Axis Min Value", param: "realMin" },
@@ -8,6 +9,9 @@ const textBoxNames = [
   { name: "Imaginary Axis Max Value", param: "imgMax" },
   { name: "Imaginary Axis Resolution", param: "imagAxisRes" },
 ];
+
+// could move showCords and showFrac to here, but then would have
+// to make it global state and pass to viewer component
 export default function AxesAndHides({
   tmpParams,
   setTmpParams,
@@ -16,6 +20,11 @@ export default function AxesAndHides({
   showCords,
   showFrac,
 }) {
+  const buttons = [
+    { name: "Complex Number", state: showCords, setState: setShowCords },
+    { name: "Fractal on Orbit Drag", state: showFrac, setState: setShowFrac },
+  ];
+
   const updateParams = (newVal, param) => {
     setTmpParams({
       ...tmpParams,
@@ -27,7 +36,7 @@ export default function AxesAndHides({
     <Form>
       <Form.Group>
         {textBoxNames.map((obj) => (
-          <TextBoxControl
+          <TextBox
             displayName={obj.name}
             val={tmpParams[obj.param]}
             updateParam={(newVal) => updateParams(newVal, obj.param)}
@@ -35,39 +44,13 @@ export default function AxesAndHides({
           />
         ))}
       </Form.Group>
-      {showCords ? (
-        <>
-          <Button
-            variant="primary"
-            onClick={() => setShowCords((prev) => !prev)}
-          >
-            Hide Complex Number
-          </Button>
-        </>
-      ) : (
-        <Button variant="primary" onClick={() => setShowCords((prev) => !prev)}>
-          Show Complex Number
-        </Button>
-      )}
-      {showFrac ? (
-        <>
-          <Button
-            variant="primary"
-            onClick={() => setShowFrac((prev) => !prev)}
-          >
-            Hide Fractal on Orbit Drag
-          </Button>
-        </>
-      ) : (
-        <>
-          <Button
-            variant="primary"
-            onClick={() => setShowFrac((prev) => !prev)}
-          >
-            Show Fractal on Orbit Drag
-          </Button>
-        </>
-      )}
+      {buttons.map((obj) => (
+        <ShowHideButton
+          displayName={obj.name}
+          shouldShow={obj.state}
+          setShow={obj.setState}
+        />
+      ))}
     </Form>
   );
 }

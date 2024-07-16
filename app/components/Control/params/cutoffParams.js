@@ -1,5 +1,5 @@
 import { Form } from "react-bootstrap";
-import TextBoxControl from "../TextBoxControl";
+import TextBox from "../formElements/textBox";
 
 export default function CuttoffParams({ tmpParams, setTmpParams }) {
   const updateParams = (newVal, param) => {
@@ -11,7 +11,7 @@ export default function CuttoffParams({ tmpParams, setTmpParams }) {
   return (
     <Form>
       <Form.Group>
-        <TextBoxControl
+        <TextBox
           displayName={"Max Radius"}
           val={tmpParams.maxRad}
           updateParam={(newVal) => updateParams(newVal, "maxRad")}
@@ -19,7 +19,7 @@ export default function CuttoffParams({ tmpParams, setTmpParams }) {
       </Form.Group>
 
       <Form.Group>
-        <TextBoxControl
+        <TextBox
           displayName={"Min Radius"}
           val={tmpParams.minRad}
           updateParam={(newVal) => updateParams(newVal, "minRad")}
@@ -27,7 +27,7 @@ export default function CuttoffParams({ tmpParams, setTmpParams }) {
       </Form.Group>
 
       <Form.Group>
-        <TextBoxControl
+        <TextBox
           displayName={"Epsilon"}
           val={tmpParams.epsilon}
           updateParam={(newVal) => updateParams(newVal, "epsilon")}
@@ -35,7 +35,7 @@ export default function CuttoffParams({ tmpParams, setTmpParams }) {
       </Form.Group>
 
       <Form.Group>
-        <TextBoxControl
+        <TextBox
           displayName={"Max Iterations"}
           val={tmpParams.maxIters}
           updateParam={(newVal) => updateParams(newVal, "maxIters")}
