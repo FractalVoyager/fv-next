@@ -106,7 +106,6 @@ export default function Control({}) {
   const tmpParamsStore = useTmpParamsStore();
   // methods on ^^
   const setAlltmpParamsStore = useTmpParamsStore((state) => state.setAll);
-  const setAxises = useTmpParamsStore((state) => state.setAxises);
 
   const canWidthStore = useCanStyleStore((state) => state.width);
   // need to add this one simply for reclacuating the total screen width... could do it a different way with local state for screen width but this works too
@@ -253,111 +252,6 @@ export default function Control({}) {
     );
     setFoo((prev) => prev + 1);
   }
-
-  // handles a pan left/right/up/down
-  // for each case, the new start is calculated, then props updated,
-  // and the tmpParamsStore is updated with setAxises
-  function handlePan(direction) {
-    let height = tmpParams.imgMax - tmpParams.imgMin;
-    let width = tmpParams.realMax - tmpParams.realMin;
-    let newRealMax = tmpParams.realMax;
-    let newRealMin = tmpParams.realMin;
-    let newImgMax = tmpParams.imgMax;
-    let newImgMin = tmpParams.imgMin;
-
-    switch (direction) {
-      case "left":
-        newRealMax = tmpParams.realMax - width / 2;
-        newRealMin = tmpParams.realMin - width / 2;
-        break;
-
-      case "right":
-        newRealMax = tmpParams.realMax + width / 2;
-        newRealMin = tmpParams.realMin + width / 2;
-        break;
-
-      case "up":
-        newImgMax = tmpParams.imgMax + height / 2;
-        newImgMin = tmpParams.imgMin + height / 2;
-        break;
-
-      case "down":
-        newImgMax = tmpParams.imgMax - height / 2;
-        newImgMin = tmpParams.imgMin - height / 2;
-        break;
-
-      default:
-        return;
-    }
-
-    let { scaleX, scaleY, startX, startY } = axesToParams(
-      newImgMax,
-      newImgMin,
-      newRealMax,
-      newRealMin,
-      params.x,
-      params.y
-    );
-
-    setParams({
-      ...params,
-      startX: startX,
-      startY: startY,
-      scaleX: scaleX,
-      scaleY: scaleY,
-    });
-
-    setAxises(newRealMin, newRealMax, newImgMin, newImgMax);
-
-    return;
-  }
-
-  // handles zooms, sets the params to the new calculated zoom, and updates tmpParamsStore to it as well
-  function handleZoom(zoomIn) {
-    let height;
-    let width;
-    let newRealMax;
-    let newRealMin;
-    let newImgMax;
-    let newImgMin;
-
-    if (zoomIn) {
-      height = (tmpParams.imgMax - tmpParams.imgMin) / 2;
-      width = (tmpParams.realMax - tmpParams.realMin) / 2;
-      newRealMax = tmpParams.realMax - width / 2;
-      newRealMin = tmpParams.realMin + width / 2;
-      newImgMax = tmpParams.imgMax - height / 2;
-      newImgMin = tmpParams.imgMin + height / 2;
-    } else {
-      // math for zooming out
-      height = (tmpParams.imgMax - tmpParams.imgMin) * 2;
-      width = (tmpParams.realMax - tmpParams.realMin) * 2;
-      newRealMax = tmpParams.realMax + width / 4;
-      newRealMin = tmpParams.realMin - width / 4;
-      newImgMax = tmpParams.imgMax + height / 4;
-      newImgMin = tmpParams.imgMin - height / 4;
-    }
-
-    let { scaleX, scaleY, startX, startY } = axesToParams(
-      newImgMax,
-      newImgMin,
-      newRealMax,
-      newRealMin,
-      params.x,
-      params.y
-    );
-
-    setParams({
-      ...params,
-      scaleX: scaleX,
-      scaleY: scaleY,
-      startX: startX,
-      startY: startY,
-    });
-
-    setAxises(newRealMin, newRealMax, newImgMin, newImgMax);
-  }
-
   // calling hook to set current value of codeRef
   // * refs don't cause rerenders when they change or update value
   codeRef.current = useCgen(script);
@@ -411,8 +305,8 @@ export default function Control({}) {
                         <Form>
                           <PansAndZooms
                             tmpParams={tmpParams}
-                            handleZoom={handleZoom}
-                            handlePan={handlePan}
+                            params={params}
+                            setParams={setParams}
                           />
                           <Form />
                           <Orbits
@@ -475,8 +369,8 @@ export default function Control({}) {
                                     <Form>
                                       <PansAndZooms
                                         tmpParams={tmpParams}
-                                        handleZoom={handleZoom}
-                                        handlePan={handlePan}
+                                        params={params}
+                                        setParams={setParams}
                                       />
                                       <Form />
                                       <Orbits
