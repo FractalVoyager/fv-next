@@ -1,50 +1,47 @@
 import { Form } from "react-bootstrap";
-import TextBoxControl from "../textBoxControl";
+import TextBoxControl from "../TextBoxControl";
 
 export default function CuttoffParams({ tmpParams, setTmpParams }) {
+  const updateParams = (newVal, param) => {
+    setTmpParams({
+      ...tmpParams,
+      [param]: newVal,
+    });
+  };
   return (
     <Form>
-      <TextBoxControl
-        displayName={"Max Radius"}
-        val={tmpParams.maxRad}
-        updateParam={(newVal) =>
-          setTmpParams({
-            ...tmpParams,
-            maxRad: newVal,
-          })
-        }
-      />
-      <TextBoxControl
-        displayName={"Min Radius"}
-        val={tmpParams.minRad}
-        updateParam={(newVal) =>
-          setTmpParams({
-            ...tmpParams,
-            minRad: newVal,
-          })
-        }
-      />
-      <TextBoxControl
-        displayName={"Epsilon"}
-        val={tmpParams.epsilon}
-        updateParam={(newVal) =>
-          setTmpParams({
-            ...tmpParams,
-            epsilon: newVal,
-          })
-        }
-      />
-      <TextBoxControl
-        displayName={"Max Iterations"}
-        val={tmpParams.maxIters}
-        updateParam={(newVal) =>
-          setTmpParams({
-            ...tmpParams,
-            maxIters: newVal,
-          })
-        }
-        disabled={tmpParams.type === 2}
-      />
+      <Form.Group>
+        <TextBoxControl
+          displayName={"Max Radius"}
+          val={tmpParams.maxRad}
+          updateParam={(newVal) => updateParams(newVal, "maxRad")}
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <TextBoxControl
+          displayName={"Min Radius"}
+          val={tmpParams.minRad}
+          updateParam={(newVal) => updateParams(newVal, "minRad")}
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <TextBoxControl
+          displayName={"Epsilon"}
+          val={tmpParams.epsilon}
+          updateParam={(newVal) => updateParams(newVal, "epsilon")}
+        />
+      </Form.Group>
+
+      <Form.Group>
+        <TextBoxControl
+          displayName={"Max Iterations"}
+          val={tmpParams.maxIters}
+          updateParam={(newVal) => updateParams(newVal, "maxIters")}
+          disabled={tmpParams.type === 2}
+        />
+      </Form.Group>
     </Form>
   );
 }

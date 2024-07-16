@@ -6,7 +6,7 @@ export default function TextBoxControl({
   disabled,
 }) {
   return (
-    <Form.Group>
+    <>
       <Form.Label>{displayName}</Form.Label>
       <Form.Control
         value={val}
@@ -14,6 +14,6 @@ export default function TextBoxControl({
         type="number"
         disabled={disabled}
       ></Form.Control>
-    </Form.Group>
+    </>
   );
 }

@@ -11,6 +11,7 @@ import Orbits from "./params/orbits";
 import Gens from "./params/gens";
 import MainBtns from "./params/mainBtns";
 import AxesAndHides from "./params/axesAndHides";
+import Colors from "./params/colors";
 import {
   useBackState,
   useCompileStore,
@@ -22,13 +23,11 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useCgen } from "../../hooks/cgenHook";
 import Header from "../Header/headerComponent";
-import ColorPicker from "../Colors/SliderComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
 
 import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
 
 import { axesToParams } from "../../util/util";
 
@@ -85,36 +84,6 @@ export default function Control({}) {
       } else if (difference <= 2 && styleType === 3) {
         setStyleType(4);
       }
-
-      // CHANGE ON ADDITIONS
-      // this is the point when the header goes to min number of lines
-
-      // 836628
-      // if (width > 1037) {
-      //   width = 1038;
-      // }
-      // 1233180
-
-      let area = width * height;
-      // if (
-      //   height < 808 ||
-      //   (width < 1038 && height < 831) ||
-      //   (width < 882 && height < 0)
-      // ) {
-      //   // here go to smaller
-      //   console.log("small area");
-      //   if (styleType === 0) {
-      //     setStyleType(1);
-      //   }
-      // } else if (styleType == 1) {
-      //   setStyleType(0);
-      // }
-
-      // use area calculation??
-
-      // here... calculate how much we need to scale down and update a state, something like 0 is normal, 1 is collpsed colors,
-      // 2 is collpased orbit stuff and
-      // 3 is
     }
   });
 
@@ -174,12 +143,6 @@ export default function Control({}) {
     orbitColor: "red",
   });
 
-  // for (int x = 0; x < floor(newCanWidth); x++){
-  //   for (int y = 0; y < floor(newCanHeight); y++){
-  //    double screen_re = (((widthScale * x) + startX) - width / 2.) / (width  /2.);
-  //   double screen_im = -(((heightScale * y) + startY) - height /2.) / (height /2.);
-  //   }
-  // }
   // the values for the generate on click
   const [genVals, setGenVals] = useState([null, null]);
   // current script running/ to be run, updates to inputRef when compile and run is clicked
@@ -536,21 +499,18 @@ export default function Control({}) {
                                       setTmpParams={setTmpParams}
                                       setShowCords={setShowCords}
                                       setShowFrac={setShowFrac}
+                                      showCords={showCords}
+                                      showFrac={showFrac}
                                     />
                                   </Col>
                                 </Row>
                                 {styleType === 4 ? (
                                   <>
                                     <Row>
-                                      <Form.Control
-                                        onChange={(evt) =>
-                                          setNumColors(evt.target.value)
-                                        }
-                                        type="number"
-                                        defaultValue={numColors}
-                                        placeholder="Enter number of colors"
-                                      ></Form.Control>
-                                      <ColorPicker num={numColors} />
+                                      <Colors
+                                        setNumColors={setNumColors}
+                                        numColors={numColors}
+                                      />
                                     </Row>
                                   </>
                                 ) : (
@@ -570,6 +530,8 @@ export default function Control({}) {
                         setTmpParams={setTmpParams}
                         setShowCords={setShowCords}
                         setShowFrac={setShowFrac}
+                        showCords={showCords}
+                        showFrac={showFrac}
                       />
                     ) : (
                       ""
@@ -624,13 +586,10 @@ export default function Control({}) {
                             Select a color, close, then press update
                           </Modal.Header>
                           <Modal.Body>
-                            <Form.Control
-                              onChange={(evt) => setNumColors(evt.target.value)}
-                              type="number"
-                              defaultValue={numColors}
-                              placeholder="Enter number of colors"
-                            ></Form.Control>
-                            <ColorPicker num={numColors} />
+                            <Colors
+                              setNumColors={setNumColors}
+                              numColors={numColors}
+                            />
                           </Modal.Body>
                         </Modal>
                       </Col>
@@ -639,13 +598,10 @@ export default function Control({}) {
                     ""
                   ) : (
                     <>
-                      <Form.Control
-                        onChange={(evt) => setNumColors(evt.target.value)}
-                        type="number"
-                        defaultValue={numColors}
-                        placeholder="Enter number of colors"
-                      ></Form.Control>
-                      <ColorPicker num={numColors} />
+                      <Colors
+                        setNumColors={setNumColors}
+                        numColors={numColors}
+                      />
                     </>
                   )}
                 </Row>
