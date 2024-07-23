@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "antlr4": "^4.13.1-patch-1",
     "bootstrap": "^5.3.3",
     "chroma-js": "^2.4.2",
     "comlink": "^4.4.1",

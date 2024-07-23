@@ -21,7 +21,7 @@ import {
 } from "../../store/zustandTest.js";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useCgen } from "../../hooks/cgenHook";
+import { useJsCgen } from "../../hooks/cgenHook";
 import Header from "../Header/headerComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -254,7 +254,7 @@ export default function Control({}) {
   }
   // calling hook to set current value of codeRef
   // * refs don't cause rerenders when they change or update value
-  codeRef.current = useCgen(script);
+  codeRef.current = useJsCgen(script);
   // compile - in hook, only runs if code changes - triggers change in state
   // that useGenPixles is binded to, so this also generates new pixles with useGenPixles
   useCompileCode(codeRef.current);
