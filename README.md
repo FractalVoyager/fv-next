@@ -82,6 +82,7 @@ In this branch, I plan to refactor the project to next.js and the js runtime for
 # new TODOs
 
 - clean up global state (1.1)
-- switch cgen to antlr js runtime instead of c++ compiled to wasm to simplify flow (1.2)
+- switch cgen to antlr js runtime instead of c++ compiled to wasm to simplify flow (1.2) DONE ON STAGE
 - refactor viewer componenet (1.3)
 - create a nice language doccumentation and walkthrough - use paper (1.4)
+- investigate using webpack to bundle the antlr4 code (1.5)

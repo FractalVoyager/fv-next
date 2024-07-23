@@ -41,6 +41,7 @@ export default function AxesAndHides({
             val={tmpParams[obj.param]}
             updateParam={(newVal) => updateParams(newVal, obj.param)}
             disabled={tmpParams.type === 2}
+            key={obj.name}
           />
         ))}
       </Form.Group>
@@ -49,6 +50,7 @@ export default function AxesAndHides({
           displayName={obj.name}
           shouldShow={obj.state}
           setShow={obj.setState}
+          key={obj.name}
         />
       ))}
     </Form>

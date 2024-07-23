@@ -10,7 +10,7 @@ command: 'set' variable 'to' expression #SET_TO_COM |
         'par' command #PAR_COM |
         'dyn' command #DYN_COM |
         if_then #IF_THEN_COM |
-        loop #LOOP_COM // |
+        loop #LOOP_COM // |g
         // saddle_drop #SADDLE_DROP_COM
         ;
 

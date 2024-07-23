@@ -124,6 +124,7 @@ export default function PansAndZooms({ tmpParams, params, setParams }) {
           displayName={obj.name}
           setParam={obj.handler}
           disabled={tmpParams.type === 2}
+          key={obj.name}
         />
       ))}
     </>

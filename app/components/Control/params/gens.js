@@ -22,13 +22,18 @@ export default function Gens({ tmpParams, setTmpParams, setGenVals }) {
               placeholder={obj.name}
               val={tmpParams[obj.param] == null ? "" : tmpParams[obj.param]}
               updateParam={(newVal) => updateParams(newVal, obj.param)}
+              key={obj.name}
             />
           ))}
         </>
       ) : (
         <>
           {textBoxNames.map((obj) => (
-            <TextBoxNoTitle placeholder={obj.name} isDisabled={true} />
+            <TextBoxNoTitle
+              placeholder={obj.name}
+              isDisabled={true}
+              key={obj.name}
+            />
           ))}
         </>
       )}
