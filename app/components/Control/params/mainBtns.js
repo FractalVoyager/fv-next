@@ -26,12 +26,14 @@ export default function MainBtns({
             displayName={obj.name}
             setParam={obj.setter}
             isNotPrimary={obj.name === "Update"}
+            key={obj.name}
           />
         ) : (
           <Btn
             displayName={obj.name}
             isDisabled={true}
             isNotPrimary={obj.name === "Update"}
+            key={obj.name}
           />
         )
       )}

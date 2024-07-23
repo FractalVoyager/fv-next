@@ -18,7 +18,7 @@ export default function CuttoffParams({ tmpParams, setTmpParams }) {
   return (
     <Form>
       {textBoxNames.map((obj) => (
-        <Form.Group>
+        <Form.Group key={obj.name}>
           <TextBox
             displayName={obj.name}
             val={tmpParams[obj.param]}
