@@ -117,6 +117,8 @@ export default function Control({}) {
 
   // back clicks
   const [back, setBack] = useState(0);
+  // 3d line - this is a tmp solution and it should probably be a new type in tmp params
+  const [willDrawLine, setWillDrawLine] = useState(false);
   // cpx number
   const [showCords, setShowCords] = useState(true);
   // if we should clear fractal on orbit drag
@@ -283,6 +285,16 @@ export default function Control({}) {
           {wrapperRef.current ? (
             <>
               <Header myRef={(el) => (childrenRefs.current[0] = el)} />
+              TODO TODO TODO this is breaking the changing some to modals
+              {tmpParams.type === 0 ? (
+                <Button
+                  onClick={() => setWillDrawLine((oldState) => !oldState)}
+                >
+                  Draw Line
+                </Button>
+              ) : (
+                <Button disabled>Draw Line</Button>
+              )}
               <Container fluid ref={(el) => (childrenRefs.current[1] = el)}>
                 <Row>
                   <div className={styleType < 3 ? "col" : ""}>
@@ -530,6 +542,7 @@ export default function Control({}) {
           orbitColor={params.orbitColor}
           genVals={genVals}
           showFrac={showFrac}
+          willDrawLine={willDrawLine}
         />
       </div>
     </>

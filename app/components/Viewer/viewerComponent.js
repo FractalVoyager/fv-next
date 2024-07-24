@@ -52,6 +52,7 @@ export default function Viewer({
   orbitColor,
   genVals,
   showFrac,
+  willDrawLine,
 }) {
   // * useRefs * //
 
@@ -595,6 +596,56 @@ export default function Viewer({
       setIsDown(true);
   }
 
+  const [currLine, setCurrLine] = useState({ start: null, end: null });
+
+  // todo - immplement this elsewhere
+  function getRealCanCord(val, isX) {}
+
+  function drawLineDraw(ctx) {
+    // if there is a start but no end, move to the start
+    if (currLine.start && !currLine.end) {
+      ctx.beginPath();
+      let realStartX = currLine.start.x * (xRes / ctx.canvas.clientWidth);
+      let realStartY = currLine.start.y * (yRes / ctx.canvas.clientHeight);
+      ctx.moveTo(realStartX, realStartY);
+      return;
+    }
+    // if there is no start, there can't be an end and nothing should be done
+    // otherwise, there is both and we should draw
+    if (currLine.end) {
+      let realEndX = currLine.end.x * (xRes / ctx.canvas.clientWidth);
+      let realEndY = currLine.end.y * (yRes / ctx.canvas.clientHeight);
+      ctx.lineTo(realEndX, realEndY);
+      ctx.stroke();
+    }
+  }
+
+  function drawLineMouseMove(e) {
+    e.preventDefault();
+    let newX = parseInt(e.nativeEvent.offsetX);
+    let newY = parseInt(e.nativeEvent.offsetY);
+    // haven't moved the mosue yet, will handle if the mouse isn't down at all in jsx so we know there is at least a start val
+    if (!currLine.end) {
+      setCurrLine({ start: currLine.start, end: { x: newX, y: newY } });
+      // there is an end so swap
+    } else {
+      setCurrLine({ start: currLine.end, end: { x: newX, y: newY } });
+    }
+  }
+
+  function drawLineMouseDown(e) {
+    e.preventDefault();
+    setCurrLine({
+      start: {
+        x: parseInt(e.nativeEvent.offsetX),
+        y: parseInt(e.nativeEvent.offsetY),
+      },
+      end: null,
+    });
+  }
+
+  function drawLineMouseUp(e) {}
+
   // only passed to rectangle canvas
   function mouseMove(e) {
     e.preventDefault();
@@ -768,35 +819,61 @@ export default function Viewer({
                 maxHeight={wrapperRef.current.clientHeight}
                 id="fracCan"
               />
-              <Canvas
-                className="can"
-                options={orbitOpts}
-                draw={drawOrbit}
-                xRes={xRes}
-                yRes={yRes}
-                maxWidth={wrapperRef.current.clientWidth}
-                maxHeight={wrapperRef.current.clientHeight}
-                id="orbitCan"
-              />
-              <Canvas
-                className="can"
-                xRes={xRes}
-                yRes={yRes}
-                maxWidth={wrapperRef.current.clientWidth}
-                maxHeight={wrapperRef.current.clientHeight}
-                draw={drawing && isDown ? drawRect : clearRect}
-                id="rectCan"
-                options={rectOpts}
-                mouseDown={(e) => mouseDown(e)}
-                mouseMove={(e) =>
-                  isDown
-                    ? mouseMove(e)
-                    : showCords
-                    ? mouseMoveCalcCords(e)
-                    : null
-                }
-                mouseUp={(e) => mouseUp(e)}
-              />
+              {willDrawLine ? (
+                <>
+                  <Canvas
+                    className="can"
+                    options={rectOpts}
+                    draw={drawLineDraw}
+                    mouseDown={(e) => drawLineMouseDown(e)}
+                    mouseMove={(e) =>
+                      currLine.start
+                        ? drawLineMouseMove(e)
+                        : showCords
+                        ? mouseMoveCalcCords(e)
+                        : null
+                    }
+                    mouseUp={(e) => drawLineMouseUp(e)}
+                    xRes={xRes}
+                    yRes={yRes}
+                    maxWidth={wrapperRef.current.clientWidth}
+                    maxHeight={wrapperRef.current.clientHeight}
+                    id="drawLineCan"
+                  />
+                </>
+              ) : (
+                <>
+                  <Canvas
+                    className="can"
+                    options={orbitOpts}
+                    draw={drawOrbit}
+                    xRes={xRes}
+                    yRes={yRes}
+                    maxWidth={wrapperRef.current.clientWidth}
+                    maxHeight={wrapperRef.current.clientHeight}
+                    id="orbitCan"
+                  />
+                  <Canvas
+                    className="can"
+                    xRes={xRes}
+                    yRes={yRes}
+                    maxWidth={wrapperRef.current.clientWidth}
+                    maxHeight={wrapperRef.current.clientHeight}
+                    draw={drawing && isDown ? drawRect : clearRect}
+                    id="rectCan"
+                    options={rectOpts}
+                    mouseDown={(e) => mouseDown(e)}
+                    mouseMove={(e) =>
+                      isDown
+                        ? mouseMove(e)
+                        : showCords
+                        ? mouseMoveCalcCords(e)
+                        : null
+                    }
+                    mouseUp={(e) => mouseUp(e)}
+                  />
+                </>
+              )}
             </>
           ) : (
             ""
