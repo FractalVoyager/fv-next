@@ -13,6 +13,7 @@ import Gens from "./params/gens";
 import MainBtns from "./params/mainBtns";
 import AxesAndHides from "./params/axesAndHides";
 import Colors from "./params/colors";
+import Line from "./params/line";
 import {
   useBackState,
   useCompileStore,
@@ -117,8 +118,6 @@ export default function Control({}) {
 
   // back clicks
   const [back, setBack] = useState(0);
-  // 3d line - this is a tmp solution and it should probably be a new type in tmp params
-  const [willDrawLine, setWillDrawLine] = useState(false);
   // cpx number
   const [showCords, setShowCords] = useState(true);
   // if we should clear fractal on orbit drag
@@ -153,6 +152,28 @@ export default function Control({}) {
   const [numColors, setNumColors] = useState(50);
   // state if an update is ok
   const [updateOk, setUpdateOk] = useState(false);
+
+  //////// LINE STUFF /////////
+  // 3d line - this is a tmp solution and it should probably be a new type in tmp params
+  // todo should really just make all of this a seperate componnet - TODO
+  const [willDrawLine, setWillDrawLine] = useState(false);
+  const [origLinePoints, setOrigLinePoints] = useState(null);
+  const [pointsModalOpen, setPointsModalOpen] = useState(false);
+  const [shouldCalculateJulias, setShouldCalculateJulias] = useState(false);
+  const [newLinePoints, setNewLinePoints] = useState(null);
+
+  useEffect(() => {
+    if (shouldCalculateJulias) {
+      // think that I need this to be done in viewer component because it has all the client conversion data and stuff
+    }
+  }, [shouldCalculateJulias]);
+
+  // one change of line points, do the stuff
+  useEffect(() => {
+    // only if they are really there
+    if (origLinePoints) {
+    }
+  }, [origLinePoints]);
 
   // * useEffects * //
 
@@ -294,6 +315,34 @@ export default function Control({}) {
                 </Button>
               ) : (
                 <Button disabled>Draw Line</Button>
+              )}
+              {origLinePoints ? (
+                <>
+                  <Button
+                    variant="primary"
+                    onClick={() => setPointsModalOpen(true)}
+                  >
+                    Line Options
+                  </Button>
+                  <Modal
+                    show={pointsModalOpen}
+                    onHide={() => setPointsModalOpen(false)}
+                    size="large"
+                  >
+                    <Modal.Header closeButton>3d model line edit</Modal.Header>
+                    <Modal.Body>
+                      <Container>
+                        <Line
+                          origPoints={origLinePoints}
+                          setNewPoints={setNewLinePoints}
+                          setShouldCalculateJulias={setShouldCalculateJulias}
+                        />
+                      </Container>
+                    </Modal.Body>
+                  </Modal>
+                </>
+              ) : (
+                ""
               )}
               <Container fluid ref={(el) => (childrenRefs.current[1] = el)}>
                 <Row>
@@ -543,6 +592,7 @@ export default function Control({}) {
           genVals={genVals}
           showFrac={showFrac}
           willDrawLine={willDrawLine}
+          setOrigLinePoints={setOrigLinePoints}
         />
       </div>
     </>

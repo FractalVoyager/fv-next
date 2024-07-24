@@ -53,6 +53,7 @@ export default function Viewer({
   genVals,
   showFrac,
   willDrawLine,
+  setOrigLinePoints,
 }) {
   // * useRefs * //
 
@@ -597,6 +598,8 @@ export default function Viewer({
   }
 
   const [currLine, setCurrLine] = useState({ start: null, end: null });
+  const [linePoints, setLinePoints] = useState([]);
+  const [endDraw, setEndDraw] = useState(false);
 
   // todo - immplement this elsewhere
   function getRealCanCord(val, isX) {}
@@ -620,10 +623,15 @@ export default function Viewer({
     }
   }
 
+  function endDrawLineDraw(ctx) {
+    ctx.closePath();
+  }
+
   function drawLineMouseMove(e) {
     e.preventDefault();
     let newX = parseInt(e.nativeEvent.offsetX);
     let newY = parseInt(e.nativeEvent.offsetY);
+    setLinePoints((linePoints) => [...linePoints, [newX, newY]]);
     // haven't moved the mosue yet, will handle if the mouse isn't down at all in jsx so we know there is at least a start val
     if (!currLine.end) {
       setCurrLine({ start: currLine.start, end: { x: newX, y: newY } });
@@ -635,6 +643,10 @@ export default function Viewer({
 
   function drawLineMouseDown(e) {
     e.preventDefault();
+    setLinePoints((linePoints) => [
+      ...linePoints,
+      [parseInt(e.nativeEvent.offsetX), parseInt(e.nativeEvent.offsetY)],
+    ]);
     setCurrLine({
       start: {
         x: parseInt(e.nativeEvent.offsetX),
@@ -644,7 +656,11 @@ export default function Viewer({
     });
   }
 
-  function drawLineMouseUp(e) {}
+  function drawLineMouseUp(e) {
+    e.preventDefault();
+    setOrigLinePoints(linePoints);
+    setEndDraw(true);
+  }
 
   // only passed to rectangle canvas
   function mouseMove(e) {
@@ -824,7 +840,7 @@ export default function Viewer({
                   <Canvas
                     className="can"
                     options={rectOpts}
-                    draw={drawLineDraw}
+                    draw={endDraw ? endDrawLineDraw : drawLineDraw}
                     mouseDown={(e) => drawLineMouseDown(e)}
                     mouseMove={(e) =>
                       currLine.start

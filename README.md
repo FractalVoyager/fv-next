@@ -86,3 +86,4 @@ In this branch, I plan to refactor the project to next.js and the js runtime for
 - refactor viewer componenet (1.3)
 - create a nice language doccumentation and walkthrough - use paper (1.4)
 - investigate using webpack to bundle the antlr4 code (1.5)
+- further abstract control compoenent for modals - maybe - or see if its worth it(1.6)
