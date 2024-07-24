@@ -18,6 +18,7 @@
     "react-bootstrap": "^2.10.4",
     "react-color": "^2.19.3",
     "react-dom": "^18",
+    "sass": "^1.77.8",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

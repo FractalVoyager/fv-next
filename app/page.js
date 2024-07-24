@@ -1,5 +1,6 @@
 "use client";
 import "./global.css";
+import "./customBootstrap.scss";
 import { useInitEmception } from "./hooks/emceptionHooks";
 import Control from "./components/Control/controlComponent";
 import Terminal from "./components/Console/myTermComponent";

@@ -5,7 +5,6 @@ export default function Btn({
   isDisabled,
   isNotPrimary,
 }) {
-  console.log(setParam);
   if (isDisabled) {
     return (
       <Button variant={isNotPrimary ? "warning" : "primary"} disabled>

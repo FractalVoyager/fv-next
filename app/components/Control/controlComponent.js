@@ -1,6 +1,7 @@
 "use client";
 
 import "./control.css";
+import { Card } from "react-bootstrap";
 import { useRef, useState, useEffect } from "react";
 import Viewer from "../Viewer/viewerComponent";
 import { useCompileCode } from "../../hooks/emceptionHooks";
@@ -281,8 +282,7 @@ export default function Control({}) {
         >
           {wrapperRef.current ? (
             <>
-              <Header ref={(el) => (childrenRefs.current[0] = el)} />
-
+              <Header myRef={(el) => (childrenRefs.current[0] = el)} />
               <Container fluid ref={(el) => (childrenRefs.current[1] = el)}>
                 <Row>
                   <div className={styleType < 3 ? "col" : ""}>
