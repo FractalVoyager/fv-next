@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import CordsBox from "../CordsBox/cordsBoxComponent";
 import { canvasToComplex, canvasToPoint } from "../../util/util";
 import { useBackState, useCompileStore } from "../../store/zustandTest.js";
-import { useGenPixles } from "../../hooks/emceptionHooks";
+import { useGenPixles, genOneJulia } from "../../hooks/emceptionHooks";
 import {
   useTmpParamsStore,
   useTermStore,
@@ -54,6 +54,7 @@ export default function Viewer({
   showFrac,
   willDrawLine,
   setOrigLinePoints,
+  linePointsToCalc,
 }) {
   // * useRefs * //
 
@@ -597,9 +598,72 @@ export default function Viewer({
       setIsDown(true);
   }
 
+  ///////// line stuff ////////////
+
   const [currLine, setCurrLine] = useState({ start: null, end: null });
   const [linePoints, setLinePoints] = useState([]);
   const [endDraw, setEndDraw] = useState(false);
+  const content = useCompileStore((state) => state.content);
+
+  useEffect(() => {
+    // have a list of line points and need to get re, im from each one
+    // then, need to call emception and get list of pixle arrays
+    // then, need to convert to black and white
+    // in the future, converting to black and white should probably be done in wasm
+    // or just have a wasm that gets just list of corods or something
+    // for now, this should work
+    // todo - do something with option or just force remove duplicates
+
+    const processPoints = async () => {
+      if (linePointsToCalc) {
+        const pixleProms = linePointsToCalc.map(async (point) => {
+          // get re, im
+          // math for conversion so can call canvas to complex to get the complex values for currently at spot
+          let canX =
+            genPixlesParams.widthScale *
+              (point[0] * (xRes / clinetDims.width)) +
+            genPixlesParams.startX;
+          let canY =
+            genPixlesParams.heightScale *
+              (point[1] * (yRes / clinetDims.height)) +
+            genPixlesParams.startY;
+
+          let [re, im] = canvasToComplex(canX, canY, xRes, yRes);
+          console.log(re, im);
+          let pixles = await genOneJulia(
+            content,
+            1,
+            re,
+            im,
+            null,
+            null,
+            genPixlesParams.maxIters,
+            genPixlesParams.epsilon,
+            genPixlesParams.minRadius,
+            genPixlesParams.maxRadius,
+            genPixlesParams.startX,
+            genPixlesParams.startY,
+            genPixlesParams.newCanWidth,
+            genPixlesParams.newCanHeight,
+            genPixlesParams.canWidth,
+            genPixlesParams.canHeight,
+            genPixlesParams.widthScale,
+            genPixlesParams.heightScale,
+            genPixlesParams.arrayLength,
+            genPixlesParams.colors,
+            genPixlesParams.numColors,
+            genPixlesParams.orbitNum
+          );
+          console.log(pixles);
+          return pixles;
+        });
+
+        const pixleArr = await Promise.all(pixleProms);
+        console.log(pixleArr);
+      }
+    };
+    processPoints();
+  }, [linePointsToCalc]);
 
   // todo - immplement this elsewhere
   function getRealCanCord(val, isX) {}
@@ -639,6 +703,8 @@ export default function Viewer({
     } else {
       setCurrLine({ start: currLine.end, end: { x: newX, y: newY } });
     }
+    // todo - do the getting re, im for display if needed like in other move fcn
+    // could also jsut store the re, im, but then would need to convert more I think -- todo check
   }
 
   function drawLineMouseDown(e) {

@@ -123,6 +123,133 @@ const useCompileCode = (code) => {
   }, [code]);
 };
 
+const genOneJulia = async (
+  content,
+  type,
+  fixed_re,
+  fixed_im,
+  clicked_re,
+  clicked_im,
+  maxIters,
+  epsilon,
+  minRadius,
+  maxRadius,
+  startX,
+  startY,
+  newCanWidth,
+  newCanHeight,
+  canWidth,
+  canHeight,
+  widthScale,
+  heightScale,
+  arrayLength,
+  colors,
+  numColors,
+  orbitNum
+) => {
+  const createMod = async () => {
+    try {
+      const loadModule = (await doimport(new Blob([content]))).default;
+      const Module = await loadModule();
+      return await myGenPixles(Module);
+    } catch (error) {
+      console.error("Error ", error);
+    }
+  };
+
+  const myGenPixles = async (Module) => {
+    try {
+      let pixelsPtr = Module._malloc(
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+      let dataheap = new Uint8Array(
+        Module.HEAPU8.buffer,
+        pixelsPtr,
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+
+      let reds = colors.map((color) => color[0]);
+      let greens = colors.map((color) => color[1]);
+      let blues = colors.map((color) => color[2]);
+
+      let redPtr = Module._malloc(numColors * Uint8Array.BYTES_PER_ELEMENT);
+      let greenPtr = Module._malloc(numColors * Uint8Array.BYTES_PER_ELEMENT);
+      let bluePtr = Module._malloc(numColors * Uint8Array.BYTES_PER_ELEMENT);
+
+      reds.forEach((value, i) => Module.setValue(redPtr + i, value, "i8"));
+      greens.forEach((value, i) => Module.setValue(greenPtr + i, value, "i8"));
+      blues.forEach((value, i) => Module.setValue(bluePtr + i, value, "i8"));
+
+      await Module.cwrap("genPixles", "null", [
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+      ])(
+        type,
+        fixed_re,
+        fixed_im,
+        maxIters,
+        epsilon,
+        minRadius,
+        maxRadius,
+        startX,
+        startY,
+        newCanWidth,
+        newCanHeight,
+        canWidth,
+        canHeight,
+        widthScale,
+        heightScale,
+        dataheap.byteOffset,
+        numColors,
+        redPtr,
+        greenPtr,
+        bluePtr
+      );
+
+      let pixelArray = new Uint8ClampedArray(
+        dataheap.buffer,
+        dataheap.byteOffset,
+        arrayLength
+      );
+
+      Module._free(pixelsPtr);
+      Module._free(redPtr);
+      Module._free(greenPtr);
+      Module._free(bluePtr);
+
+      return new ImageData(pixelArray, canWidth, canHeight);
+    } catch (error) {
+      console.error("Error generating pixels:", error);
+    }
+  };
+
+  if (!content) {
+    return;
+  } else {
+    let data = await createMod();
+    console.log(data, "ending data");
+    return data;
+  }
+};
+
 /*
 useGenPixles hook - this takes all of the paramters needed to run the fractal program, and imports the string module as a real module,
 and uses it to create fractals with all the paramters needed by running the wasm compiled code
@@ -470,4 +597,4 @@ const useGenPixles = (
   return pixels;
 };
 
-export { useInitEmception, useCompileCode, useGenPixles };
+export { useInitEmception, useCompileCode, useGenPixles, genOneJulia };

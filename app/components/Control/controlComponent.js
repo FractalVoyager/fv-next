@@ -161,10 +161,14 @@ export default function Control({}) {
   const [pointsModalOpen, setPointsModalOpen] = useState(false);
   const [shouldCalculateJulias, setShouldCalculateJulias] = useState(false);
   const [newLinePoints, setNewLinePoints] = useState(null);
+  const [linePointsToCalc, setLinePointsToCalc] = useState(null);
 
+  // don't need the should CalcJulias state maybe I do
   useEffect(() => {
     if (shouldCalculateJulias) {
       // think that I need this to be done in viewer component because it has all the client conversion data and stuff
+      // needs to be newLinePoints if there is one
+      setLinePointsToCalc(origLinePoints);
     }
   }, [shouldCalculateJulias]);
 
@@ -593,6 +597,7 @@ export default function Control({}) {
           showFrac={showFrac}
           willDrawLine={willDrawLine}
           setOrigLinePoints={setOrigLinePoints}
+          linePointsToCalc={linePointsToCalc}
         />
       </div>
     </>
