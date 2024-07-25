@@ -5,6 +5,7 @@ import CordsBox from "../CordsBox/cordsBoxComponent";
 import { canvasToComplex, canvasToPoint } from "../../util/util";
 import { useBackState, useCompileStore } from "../../store/zustandTest.js";
 import { useGenPixles, genOneJulia } from "../../hooks/emceptionHooks";
+import JuliaCanvas from "./genedJuliaCanvas";
 import {
   useTmpParamsStore,
   useTermStore,
@@ -513,6 +514,11 @@ export default function Viewer({
     }
   };
 
+  const drawJulia = (pixles) => (ctx) => {
+    console.log(pixles);
+    ctx.putImageData(pixles, 0, 0);
+  };
+
   // puts image data on fractal canvas
   const drawFrac = (ctx) => {
     // update clinet widths if different - just a convient place to put this - TODO need to do this in more places
@@ -603,6 +609,7 @@ export default function Viewer({
   const [currLine, setCurrLine] = useState({ start: null, end: null });
   const [linePoints, setLinePoints] = useState([]);
   const [endDraw, setEndDraw] = useState(false);
+  const [juliaSets, setJuliaSets] = useState(null);
   const content = useCompileStore((state) => state.content);
 
   useEffect(() => {
@@ -659,7 +666,43 @@ export default function Viewer({
         });
 
         const pixleArr = await Promise.all(pixleProms);
-        console.log(pixleArr);
+        console.log(pixleArr, "OLD");
+        // setJuliaSets(pixleArr);
+
+        let newPixles = pixleArr.map((arr) => {
+          let pixles = arr.data;
+          let newPixles = new Uint8ClampedArray(pixles.length);
+          let i = 0;
+          while (i < pixles.length) {
+            if (pixles[i] === 0 && pixles[i + 1] === 0 && pixles[i + 2] === 0) {
+              console.log("cauthh!!!");
+              newPixles[i] = 0;
+              newPixles[i + 1] = 0;
+              newPixles[i + 2] = 0;
+            } else {
+              newPixles[i] = 255;
+              newPixles[i + 1] = 255;
+              newPixles[i + 2] = 255;
+            }
+            // newPixles[i] = 0;
+            // newPixles[i + 1] = 0;
+            // newPixles[i + 2] = 0;
+            newPixles[i + 3] = 255;
+            i = i + 4;
+          }
+          // console.log(newPixles);
+          // console.log(genPixlesParams.canWidth, "akls;djfal;ksdjf");
+          return new ImageData(
+            newPixles,
+            genPixlesParams.canWidth,
+            genPixlesParams.canHeight
+          );
+
+          arr.data = newPixles;
+          return arr;
+        });
+        setJuliaSets(newPixles);
+        console.log(newPixles, "NEW");
       }
     };
     processPoints();
@@ -892,16 +935,21 @@ export default function Viewer({
           {wrapperRef.current ? (
             <>
               {/* three differnet canvases - fractal, box zoom, orbit */}
-              <Canvas
-                className="can"
-                draw={clearFrac ? clearRect : drawFrac}
-                xRes={xRes}
-                yRes={yRes}
-                maxWidth={wrapperRef.current.clientWidth}
-                maxHeight={wrapperRef.current.clientHeight}
-                id="fracCan"
-              />
-              {willDrawLine ? (
+              {juliaSets ? (
+                ""
+              ) : (
+                <Canvas
+                  className="can"
+                  draw={clearFrac ? clearRect : drawFrac}
+                  xRes={xRes}
+                  yRes={yRes}
+                  maxWidth={wrapperRef.current.clientWidth}
+                  maxHeight={wrapperRef.current.clientHeight}
+                  id="fracCan"
+                />
+              )}
+
+              {willDrawLine && !juliaSets ? (
                 <>
                   <Canvas
                     className="can"
@@ -923,6 +971,8 @@ export default function Viewer({
                     id="drawLineCan"
                   />
                 </>
+              ) : juliaSets ? (
+                ""
               ) : (
                 <>
                   <Canvas
@@ -963,22 +1013,45 @@ export default function Viewer({
         </div>
         <div id="lower-cont">
           {/* download fractal canvas on click of download link */}
-          <a
-            href="#"
-            id="down"
-            onClick={(e) => {
-              e.preventDefault();
-              var link = document.createElement("a");
-              link.download = "fractal.png";
-              link.href = fracRef.current.toDataURL();
-              link.click();
-            }}
-          >
-            Download
-          </a>
+          {juliaSets ? (
+            ""
+          ) : (
+            <a
+              href="#"
+              id="down"
+              onClick={(e) => {
+                e.preventDefault();
+                var link = document.createElement("a");
+                link.download = "fractal.png";
+                link.href = fracRef.current.toDataURL();
+                link.click();
+              }}
+            >
+              Download
+            </a>
+          )}
+
           {/* cords box component */}
           <CordsBox display={showCords} cords={displayCords} id="cords-box" />
         </div>
+        {juliaSets ? (
+          <>
+            {juliaSets.map((pixelArr, idx) => (
+              <JuliaCanvas
+                className="juliaCanvas"
+                draw={drawJulia(pixelArr)}
+                xRes={xRes}
+                yRes={yRes}
+                maxWidth={wrapperRef.current.clientWidth}
+                maxHeight={wrapperRef.current.clientHeight}
+                id={"juliaCan" + idx}
+                key={idx}
+              ></JuliaCanvas>
+            ))}
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
