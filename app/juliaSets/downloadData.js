@@ -1,21 +1,46 @@
 "use client";
 import { Button } from "react-bootstrap";
 export default function DownloadDataBtn({ data }) {
-  const handleDownload = () => {
-    const json = JSON.stringify(data);
+  const convertToBitArray = (pixelData) => {
+    const bitArray = [];
+    for (let i = 0; i < pixelData.length; i += 4) {
+      const isBlack =
+        pixelData[i] === 0 && pixelData[i + 1] === 0 && pixelData[i + 2] === 0;
+      bitArray.push(isBlack ? 0 : 1);
+    }
+    return bitArray;
+  };
 
-    const blob = new Blob([json], { type: "application/json" });
+  const packBitsIntoBytes = (bitArray) => {
+    const byteArray = new Uint8Array(Math.ceil(bitArray.length / 8));
+    for (let i = 0; i < bitArray.length; i++) {
+      const byteIndex = Math.floor(i / 8);
+      const bitIndex = i % 8;
+      if (bitArray[i] === 1) {
+        byteArray[byteIndex] |= 1 << (7 - bitIndex); // Pack bits into bytes, MSB first
+      }
+    }
+    return byteArray;
+  };
 
+  const downloadBinaryFile = (byteArray) => {
+    const blob = new Blob([byteArray], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = "data.json";
-    link.href = url;
-    link.click();
 
-    // Clean up the URL object
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "pixelData.bin";
+    document.body.appendChild(a);
+    a.click();
+
     URL.revokeObjectURL(url);
-    // TODO - need to do this step in other download to prevent duplicate downloads
-    document.body.removeChild(link);
+    document.body.removeChild(a);
+  };
+
+  const handleDownload = () => {
+    const bitArray = convertToBitArray(data.data);
+    const byteArray = packBitsIntoBytes(bitArray);
+    downloadBinaryFile(byteArray);
   };
 
   return (
