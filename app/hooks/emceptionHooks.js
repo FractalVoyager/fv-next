@@ -245,7 +245,6 @@ const genOneJulia = async (
     return;
   } else {
     let data = await createMod();
-    console.log(data, "ending data");
     return data;
   }
 };

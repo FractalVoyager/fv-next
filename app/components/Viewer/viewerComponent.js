@@ -3,7 +3,11 @@ import "./viewer.css";
 import { useEffect, useState, useRef } from "react";
 import CordsBox from "../CordsBox/cordsBoxComponent";
 import { canvasToComplex, canvasToPoint } from "../../util/util";
-import { useBackState, useCompileStore } from "../../store/zustandTest.js";
+import {
+  useBackState,
+  useCompileStore,
+  useCalcJuliasStore,
+} from "../../store/zustandTest.js";
 import { useGenPixles, genOneJulia } from "../../hooks/emceptionHooks";
 import JuliaCanvas from "./genedJuliaCanvas";
 import {
@@ -730,7 +734,31 @@ export default function Viewer({
     }
   }
 
+  const setCalcJuliaParams = useCalcJuliasStore((state) => state.setParams);
+
   function endDrawLineDraw(ctx) {
+    setCalcJuliaParams({
+      clientWidth: clinetDims.width,
+      clientHeight: clinetDims.height,
+      xRes: xRes,
+      yRes: yRes,
+      maxIters: genPixlesParams.maxIters,
+      epsilon: genPixlesParams.epsilon,
+      minRadius: genPixlesParams.minRadius,
+      maxRadius: genPixlesParams.maxRadius,
+      startX: genPixlesParams.startX,
+      startY: genPixlesParams.startY,
+      newCanWidth: genPixlesParams.newCanWidth,
+      newCanHeight: genPixlesParams.newCanHeight,
+      canWidth: genPixlesParams.canWidth,
+      canHeight: genPixlesParams.canHeight,
+      widthScale: genPixlesParams.widthScale,
+      heightScale: genPixlesParams.heightScale,
+      arrayLength: genPixlesParams.arrayLength,
+      colors: genPixlesParams.colors,
+      numColors: genPixlesParams.numColors,
+      orbitNum: genPixlesParams.orbitNum,
+    });
     ctx.closePath();
   }
 

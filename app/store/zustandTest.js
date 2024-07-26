@@ -4,6 +4,16 @@ this is a store for global state used throughout app
 zustand is an npm package that "replaces" react context or redux
 */
 
+const useCalcJuliasStore = create((set) => ({
+  // the array of points that will be used to calculate the julia sets
+  finalLinePoints: null,
+  // setter
+  setFinalLinePoints: (points) => set({ finalLinePoints: points }),
+  // all the params needed to call a generator function in wasm, taken when the line ends in viewer, same as genParams there
+  params: null,
+  setParams: (params) => set({ params: params }),
+}));
+
 // store for state of compiling
 const useCompileStore = create((set) => ({
   // wether emception has been loaded
@@ -271,4 +281,5 @@ export {
   useResetType,
   useWriteOrbitStore,
   useCanStyleStore,
+  useCalcJuliasStore,
 };
