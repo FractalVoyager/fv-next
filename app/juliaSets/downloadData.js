@@ -6,7 +6,7 @@ export default function DownloadDataBtn({ data }) {
     for (let i = 0; i < pixelData.length; i += 4) {
       const isBlack =
         pixelData[i] === 0 && pixelData[i + 1] === 0 && pixelData[i + 2] === 0;
-      bitArray.push(isBlack ? 0 : 1);
+      bitArray.push(isBlack ? 1 : 0);
     }
     return bitArray;
   };

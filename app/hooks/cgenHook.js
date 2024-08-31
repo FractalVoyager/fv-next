@@ -183,7 +183,7 @@ const useJsCgen = (script) => {
     }
   }, [script]);
   // return the code
-  // console.log(code);
+  console.log(code);
   return code;
 };
 
