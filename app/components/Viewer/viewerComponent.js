@@ -60,7 +60,9 @@ export default function Viewer({
   willDrawLine,
   setOrigLinePoints,
   linePointsToCalc,
+  newLinePoints,
 }) {
+  console.log("re render");
   // * useRefs * //
 
   // this is a ref to div that canvases fill used to calculate max sizes
@@ -627,6 +629,7 @@ export default function Viewer({
 
     const processPoints = async () => {
       if (linePointsToCalc) {
+        console.log(linePointsToCalc);
         const pixleProms = linePointsToCalc.map(async (point) => {
           // get re, im
           // math for conversion so can call canvas to complex to get the complex values for currently at spot
@@ -714,6 +717,39 @@ export default function Viewer({
 
   // todo - immplement this elsewhere
   function getRealCanCord(val, isX) {}
+
+  function drawLineFromPointsDraw(ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    for (let i = 0; i < newLinePoints.length - 1; i++) {
+      ctx.beginPath();
+      ctx.moveTo(
+        newLinePoints[i][0] * (xRes / ctx.canvas.clientWidth),
+        newLinePoints[i][1] * (yRes / ctx.canvas.clientHeight)
+      );
+      ctx.lineTo(
+        newLinePoints[i + 1][0] * (xRes / ctx.canvas.clientWidth),
+        newLinePoints[i + 1][1] * (yRes / ctx.canvas.clientHeight)
+      );
+      ctx.closePath();
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.moveTo(
+      newLinePoints[newLinePoints.length - 1][0] *
+        (xRes / ctx.canvas.clientWidth),
+      newLinePoints[newLinePoints.length - 1][1] *
+        (yRes / ctx.canvas.clientHeight)
+    );
+    ctx.closePath();
+    ctx.stroke();
+    setOrigLinePoints(
+      Array.from(
+        new Set(newLinePoints.map((point) => JSON.stringify(point)))
+      ).map((point) => JSON.parse(point))
+    );
+    newLinePoints = null;
+  }
 
   function drawLineDraw(ctx) {
     // if there is a start but no end, move to the start
@@ -986,7 +1022,13 @@ export default function Viewer({
                   <Canvas
                     className="can"
                     options={rectOpts}
-                    draw={endDraw ? endDrawLineDraw : drawLineDraw}
+                    draw={
+                      newLinePoints
+                        ? drawLineFromPointsDraw
+                        : endDraw
+                        ? endDrawLineDraw
+                        : drawLineDraw
+                    }
                     mouseDown={(e) => drawLineMouseDown(e)}
                     mouseMove={(e) =>
                       currLine.start

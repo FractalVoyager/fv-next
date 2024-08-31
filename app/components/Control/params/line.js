@@ -168,6 +168,7 @@ export default function Line({
   setNewPoints,
   setShouldCalculateJulias,
 }) {
+  const [herePoints, setHerePoints] = useState(null);
   // TODO:
   /*
   - options to probablize
@@ -204,7 +205,19 @@ export default function Line({
     }
 
     console.log(newPoints);
+    setHerePoints(newPoints);
     // setNewPoints(points);
+  };
+
+  const halfPoints = () => {
+    setHerePoints(
+      herePoints.reduce((acc, point, idx) => {
+        if (idx % 2 === 0) {
+          acc.push(point);
+        }
+        return acc;
+      }, [])
+    );
   };
   return (
     <>
@@ -225,8 +238,26 @@ export default function Line({
           displayName="Set Degree and make new line"
           setParam={() => makePolynomial(origPoints, currDegree)}
         />
+        {herePoints ? (
+          <>
+            New Line is {herePoints.length} points long
+            <Btn displayName="half points?" setParam={() => halfPoints()} />
+            <Btn
+              displayName="set line"
+              setParam={() => {
+                setNewPoints(herePoints);
+                setHerePoints(null);
+              }}
+            />
+          </>
+        ) : (
+          ""
+        )}
         <Link href="/juliaSets">
-          <Btn displayName="Generate Julia Sets ->" setParam={generate()} />
+          <Btn
+            displayName="Generate Julia Sets with  line ->"
+            setParam={generate()}
+          />
         </Link>
       </Form>
     </>

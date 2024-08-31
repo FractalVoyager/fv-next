@@ -45,6 +45,7 @@ julia set or obit button is also here, but handled differently than above flow
 */
 
 export default function Control({}) {
+  console.log("re render control");
   // * refs * //
   const wrapperRef = useRef(null);
   const childrenRefs = useRef([]);
@@ -596,8 +597,12 @@ export default function Control({}) {
           genVals={genVals}
           showFrac={showFrac}
           willDrawLine={willDrawLine}
-          setOrigLinePoints={setOrigLinePoints}
+          setOrigLinePoints={(val) => {
+            setOrigLinePoints(val);
+            setNewLinePoints(null);
+          }}
           linePointsToCalc={linePointsToCalc}
+          newLinePoints={newLinePoints}
         />
       </div>
     </>
