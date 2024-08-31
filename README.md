@@ -5,7 +5,6 @@
    1.2 - change the export to binary files to be [],[],[],[] where each array is 0 or 1 for if it is black or white
    1.3 - add a check that it must always be square to do the julia set thing
 2. change the line creation after drawing to take endpoints and paramterize up to a certain paramter i.e. 2nd order (or at least the option)
-   2.1 default to removing the repeated points
    2.2 allow user to specify how many points along the line there are if go with option to paramterize, default to min amount in terms of pixels (all connected)
 
 ## Fractal Voyager

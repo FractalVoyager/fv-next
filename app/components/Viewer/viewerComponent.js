@@ -795,7 +795,11 @@ export default function Viewer({
 
   function drawLineMouseUp(e) {
     e.preventDefault();
-    setOrigLinePoints(linePoints);
+    setOrigLinePoints(
+      Array.from(new Set(linePoints.map((point) => JSON.stringify(point)))).map(
+        (point) => JSON.parse(point)
+      )
+    );
     setEndDraw(true);
   }
 
