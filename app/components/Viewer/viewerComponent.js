@@ -62,7 +62,6 @@ export default function Viewer({
   linePointsToCalc,
   newLinePoints,
 }) {
-  console.log("re render");
   // * useRefs * //
 
   // this is a ref to div that canvases fill used to calculate max sizes
@@ -643,14 +642,11 @@ export default function Viewer({
             genPixlesParams.startY;
 
           let [re, im] = canvasToComplex(canX, canY, xRes, yRes);
-          console.log(re, im);
+          console.log(re, im, genPixlesParams.length);
           let pixles = await genOneJulia(
             content,
-            1,
             re,
             im,
-            null,
-            null,
             genPixlesParams.maxIters,
             genPixlesParams.epsilon,
             genPixlesParams.minRadius,
@@ -663,10 +659,7 @@ export default function Viewer({
             genPixlesParams.canHeight,
             genPixlesParams.widthScale,
             genPixlesParams.heightScale,
-            genPixlesParams.arrayLength,
-            genPixlesParams.colors,
-            genPixlesParams.numColors,
-            genPixlesParams.orbitNum
+            genPixlesParams.arrayLength / 4
           );
           console.log(pixles);
           return pixles;

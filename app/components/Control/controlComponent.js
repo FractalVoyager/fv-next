@@ -45,7 +45,6 @@ julia set or obit button is also here, but handled differently than above flow
 */
 
 export default function Control({}) {
-  console.log("re render control");
   // * refs * //
   const wrapperRef = useRef(null);
   const childrenRefs = useRef([]);

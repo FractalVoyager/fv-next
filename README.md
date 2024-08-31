@@ -4,8 +4,7 @@
     1.1 - change the julia set viewing to use new data type, how to do this in the new3d repo
     1.2 - change the export to binary files to be [],[],[],[] where each array is 0 or 1 for if it is black or white
     1.3 - add a check that it must always be square to do the julia set thing
-2.  2.2 allow user to specify how many points along the line there are if go with option to paramterize, default to min amount in terms of pixels (all connected)
-    2.3 pass line back to redraw the line
+2.
 
 ## Fractal Voyager
 

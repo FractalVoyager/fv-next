@@ -56,6 +56,22 @@ function cgen(stream) {
     "int color = ceil((double)iterations*numColors/maxIters);\n" +
     // set the place in array based on color/iterations
     "ptr[getIdx(x, y, width, 0)] = redPtr[color];\nptr[getIdx(x, y, width, 1)] = greenPtr[color];\nptr[getIdx(x, y, width, 2)] = bluePtr[color]; \nptr[getIdx(x, y, width, 3)] = 255;\n}\n}\n}\n";
+
+  const genOneJulia =
+    "EMSCRIPTEN_KEEPALIVE void genOneJulia(double fixed_re, double fixed_im, int maxIters, double epsilon, double minRadius, double maxRadius, double startX, double startY, double newCanWidth, double newCanHeight, int width, int height, double widthScale, double heightScale, uint8_t *ptr)\n{\n" +
+    "for (int x = 0; x < floor(newCanWidth); x++){\n" +
+    "for (int y = 0; y < floor(newCanHeight); y++){\n" +
+    "double screen_re = (((widthScale * x) + startX) - width / 2.) / (width  /2.);\n" +
+    "double screen_im = -(((heightScale * y) + startY) - height /2.) / (height /2.);\n" +
+    "int iterations;\n" +
+    "iterations = calcPixel(screen_re, screen_im, fixed_re, fixed_im, maxIters, minRadius, maxRadius, 1, epsilon);\n" +
+    "int color;\n" +
+    "if(iterations == 0) {\n" +
+    "color = 1;\n" +
+    "} else {\n" +
+    "color = 0;\n" +
+    "}\nptr[y * width + x] = color;\n}\n}\n}\n";
+
   // generate getIdx
   const getIdx =
     "int getIdx(int x, int y, int width, int color){\nint red = y * (width * 4) + x * 4;\nreturn red + color;\n}\n";
@@ -72,6 +88,7 @@ function cgen(stream) {
     'extern "C" {\n' +
     bigLoops +
     orbit +
+    genOneJulia +
     "}\n";
   outputCode = tmp;
   // get the initla type of fractal that is stored in the visitor class and set it to a vaiable here

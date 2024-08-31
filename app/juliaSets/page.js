@@ -8,8 +8,17 @@ import DownloadDataBtn from "./downloadData";
 
 export default function JuliaSetsPage({}) {
   const drawJulia = (pixles) => (ctx) => {
-    console.log(pixles);
-    ctx.putImageData(pixles, 0, 0);
+    ctx.fillStyle = "black";
+    let width = Math.sqrt(pixles.length);
+    pixles.forEach((val, idx) => {
+      if (val === 1) {
+        console.log("CAUGHT");
+        let y = idx / width;
+        let x = idx % width;
+        ctx.fillRect(x, y, 1, 1);
+      }
+    });
+    // ctx.putImageData(pixles, 0, 0);
   };
   // line that we will generate from
   // TODO - change back to const
@@ -90,11 +99,8 @@ export default function JuliaSetsPage({}) {
         console.log(re, im);
         let pixles = await genOneJulia(
           content,
-          1,
           re,
           im,
-          null,
-          null,
           genParams.maxIters,
           genParams.epsilon,
           genParams.minRadius,
@@ -107,47 +113,44 @@ export default function JuliaSetsPage({}) {
           genParams.canHeight,
           genParams.widthScale,
           genParams.heightScale,
-          genParams.arrayLength,
-          genParams.colors,
-          genParams.numColors,
-          genParams.orbitNum
+          genParams.arrayLength / 4
         );
         return pixles;
       });
 
       const pixleArr = await Promise.all(pixleProms);
-      console.log(pixleArr, "OLD");
+      // console.log(pixleArr, "OLD");
       // setJuliaSets(pixleArr);
 
       // todo, do this one when first get them instead of redoing the whole array
-      let newPixles = pixleArr.map((arr) => {
-        let pixles = arr.data;
-        let newPixles = new Uint8ClampedArray(pixles.length);
-        let i = 0;
-        while (i < pixles.length) {
-          if (pixles[i] === 0 && pixles[i + 1] === 0 && pixles[i + 2] === 0) {
-            console.log("cauthh!!!");
-            newPixles[i] = 0;
-            newPixles[i + 1] = 0;
-            newPixles[i + 2] = 0;
-          } else {
-            newPixles[i] = 255;
-            newPixles[i + 1] = 255;
-            newPixles[i + 2] = 255;
-          }
-          newPixles[i + 3] = 255;
-          i = i + 4;
-        }
+      // let newPixles = pixleArr.map((arr) => {
+      //   let pixles = arr.data;
+      //   let newPixles = new Uint8ClampedArray(pixles.length);
+      //   let i = 0;
+      //   while (i < pixles.length) {
+      //     if (pixles[i] === 0 && pixles[i + 1] === 0 && pixles[i + 2] === 0) {
+      //       console.log("cauthh!!!");
+      //       newPixles[i] = 0;
+      //       newPixles[i + 1] = 0;
+      //       newPixles[i + 2] = 0;
+      //     } else {
+      //       newPixles[i] = 255;
+      //       newPixles[i + 1] = 255;
+      //       newPixles[i + 2] = 255;
+      //     }
+      //     newPixles[i + 3] = 255;
+      //     i = i + 4;
+      //   }
 
-        return new ImageData(
-          newPixles,
-          genParams.canWidth,
-          genParams.canHeight
-        );
-      });
-      setJuliaSets(newPixles);
+      //   return new ImageData(
+      //     newPixles,
+      //     genParams.canWidth,
+      //     genParams.canHeight
+      //   );
+      // });
+      setJuliaSets(pixleArr);
 
-      console.log(newPixles, "NEW");
+      // console.log(newPixles, "NEW");
       // return newPixles;
     };
 
@@ -158,7 +161,7 @@ export default function JuliaSetsPage({}) {
   //   stopTimer(); // Stop the timer when all promises are resolved
   // }
 
-  console.log(juliaSets, "JULIA SETS");
+  // console.log(juliaSets, "JULIA SETS");
   if (!juliaSets) {
     return (
       <>
