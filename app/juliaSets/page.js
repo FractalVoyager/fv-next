@@ -2,7 +2,7 @@
 import { useCalcJuliasStore, useCompileStore } from "../store/zustandTest";
 import { useState, useEffect, useRef } from "react";
 import { canvasToComplex } from "../util/util";
-import { genOneJulia } from "../hooks/emceptionHooks";
+import { genOneJulia, genJulias } from "../hooks/emceptionHooks";
 import JuliaCanvas from "../components/Viewer/genedJuliaCanvas";
 import DownloadDataBtn from "./downloadData";
 
@@ -77,6 +77,46 @@ export default function JuliaSetsPage({}) {
     // genParams is same as genPixlesgenParams in viewer component
 
     const processPoints = async () => {
+      let newPoints = linePoints.map((point) => {
+        let canX =
+          genParams.widthScale *
+            (point[0] * (genParams.xRes / genParams.clientWidth)) +
+          genParams.startX;
+        let canY =
+          genParams.heightScale *
+            (point[1] * (genParams.yRes / genParams.clientHeight)) +
+          genParams.startY;
+
+        let [re, im] = canvasToComplex(
+          canX,
+          canY,
+          genParams.xRes,
+          genParams.yRes
+        );
+        return [re, im];
+      });
+      let pixels = await genJulias(
+        content,
+        newPoints,
+        genParams.maxIters,
+        genParams.epsilon,
+        genParams.minRadius,
+        genParams.maxRadius,
+        genParams.startX,
+        genParams.startY,
+        genParams.newCanWidth,
+        genParams.newCanHeight,
+        genParams.canWidth,
+        genParams.canHeight,
+        genParams.widthScale,
+        genParams.heightScale,
+        genParams.arrayLength / 4
+      );
+      console.log("new pixels", pixels);
+      setJuliaSets(pixels);
+    };
+
+    const oldProcessPoints = async () => {
       const pixleProms = linePoints.map(async (point) => {
         // get re, im
         // math for conversion so can call canvas to complex to get the complex values for currently at spot

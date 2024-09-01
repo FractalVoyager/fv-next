@@ -249,6 +249,115 @@ const useCompileCode = (code) => {
 //   }
 // };
 
+// TODO - instead of genOneJulia, create genManyJulias and pass in the array so we don't keeping creating modules
+
+const genJulias = async (
+  content,
+  points,
+  maxIters,
+  epsilon,
+  minRadius,
+  maxRadius,
+  startX,
+  startY,
+  newCanWidth,
+  newCanHeight,
+  canWidth,
+  canHeight,
+  widthScale,
+  heightScale,
+  arrayLength
+) => {
+  const createMod = async () => {
+    try {
+      const loadModule = (await doimport(new Blob([content]))).default;
+      const Module = await loadModule();
+      let fcn = Module.cwrap("genOneJulia", "null", [
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+      ]);
+      let pixelsPtr = Module._malloc(
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+      let dataheap = new Uint8Array(
+        Module.HEAPU8.buffer,
+        pixelsPtr,
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+
+      let pixels = points.map(async (point) => {
+        console.log(point);
+
+        let arr = myGenPixles(point[0], point[1], fcn, dataheap);
+        return arr;
+      });
+
+      const pixleArrs = await Promise.all(pixels);
+      Module._free(pixelsPtr);
+
+      return pixleArrs;
+
+      // await myGenPixles(Module);
+    } catch (error) {
+      console.error("Error ", error);
+    }
+  };
+
+  const myGenPixles = (re, im, fcn, dataheap) => {
+    try {
+      fcn(
+        re,
+        im,
+        maxIters,
+        epsilon,
+        minRadius,
+        maxRadius,
+        startX,
+        startY,
+        newCanWidth,
+        newCanHeight,
+        canWidth,
+        canHeight,
+        widthScale,
+        heightScale,
+        dataheap.byteOffset
+      );
+
+      let pixelArray = new Uint8ClampedArray(
+        dataheap.buffer,
+        dataheap.byteOffset,
+        arrayLength
+      );
+
+      console.log(pixelArray);
+
+      return pixelArray;
+    } catch (error) {
+      console.error("Error generating pixels:", error);
+    }
+  };
+
+  if (!content) {
+    return;
+  } else {
+    let data = await createMod();
+    return data;
+  }
+};
+
 const genOneJulia = async (
   content,
   fixed_re,
@@ -694,4 +803,10 @@ const useGenPixles = (
   return pixels;
 };
 
-export { useInitEmception, useCompileCode, useGenPixles, genOneJulia };
+export {
+  useInitEmception,
+  useCompileCode,
+  useGenPixles,
+  genOneJulia,
+  genJulias,
+};
