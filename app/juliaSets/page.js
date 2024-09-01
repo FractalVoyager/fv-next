@@ -12,7 +12,6 @@ export default function JuliaSetsPage({}) {
     let width = Math.sqrt(pixles.length);
     pixles.forEach((val, idx) => {
       if (val === 1) {
-        console.log("CAUGHT");
         let y = idx / width;
         let x = idx % width;
         ctx.fillRect(x, y, 1, 1);
@@ -118,7 +117,7 @@ export default function JuliaSetsPage({}) {
         return pixles;
       });
 
-      const pixleArr = await Promise.all(pixleProms);
+      const pixleArrs = await Promise.all(pixleProms);
       // console.log(pixleArr, "OLD");
       // setJuliaSets(pixleArr);
 
@@ -148,7 +147,7 @@ export default function JuliaSetsPage({}) {
       //     genParams.canHeight
       //   );
       // });
-      setJuliaSets(pixleArr);
+      setJuliaSets(pixleArrs);
 
       // console.log(newPixles, "NEW");
       // return newPixles;
@@ -172,8 +171,8 @@ export default function JuliaSetsPage({}) {
     return (
       <>
         <div>done {juliaSets.length}</div>
-        <DownloadDataBtn data={juliaSets[0]} />
-        {juliaSets.map((pixelArr, idx) => (
+        <DownloadDataBtn data={juliaSets} />
+        {/* {juliaSets.map((pixelArr, idx) => (
           <JuliaCanvas
             className="juliaCanvas"
             draw={drawJulia(pixelArr)}
@@ -184,7 +183,7 @@ export default function JuliaSetsPage({}) {
             id={"juliaCan" + idx}
             key={idx}
           ></JuliaCanvas>
-        ))}
+        ))} */}
       </>
     );
 }
