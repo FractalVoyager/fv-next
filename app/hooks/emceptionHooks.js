@@ -289,24 +289,15 @@ const genJulias = async (
         "number",
         "number",
       ]);
-      let pixelsPtr = Module._malloc(
-        arrayLength * Uint8Array.BYTES_PER_ELEMENT
-      );
-      let dataheap = new Uint8Array(
-        Module.HEAPU8.buffer,
-        pixelsPtr,
-        arrayLength * Uint8Array.BYTES_PER_ELEMENT
-      );
 
       let pixels = points.map(async (point) => {
         console.log(point);
 
-        let arr = myGenPixles(point[0], point[1], fcn, dataheap);
+        let arr = await myGenPixles(Module, point[0], point[1], fcn);
         return arr;
       });
 
       const pixleArrs = await Promise.all(pixels);
-      Module._free(pixelsPtr);
 
       return pixleArrs;
 
@@ -316,9 +307,17 @@ const genJulias = async (
     }
   };
 
-  const myGenPixles = (re, im, fcn, dataheap) => {
+  const myGenPixles = async (Module, re, im, fcn, dataheap) => {
     try {
-      fcn(
+      let pixelsPtr = await Module._malloc(
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+      let dataheap = new Uint8Array(
+        Module.HEAPU8.buffer,
+        pixelsPtr,
+        arrayLength * Uint8Array.BYTES_PER_ELEMENT
+      );
+      await fcn(
         re,
         im,
         maxIters,
@@ -341,6 +340,7 @@ const genJulias = async (
         dataheap.byteOffset,
         arrayLength
       );
+      await Module._free(pixelsPtr);
 
       console.log(pixelArray);
 
